@@ -1,0 +1,113 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../iron-iconset-svg/iron-iconset-svg.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+
+<dom-module id="paper-number-input">
+  <template>
+    <style>
+      paper-input{
+        max-width: 70px;
+        --paper-input-container-label: {
+          display: none;
+        }
+        --paper-input-container: {
+          padding: 0;
+        }
+        --paper-input-container-input: {
+          -moz-appearance: textfield;
+          @apply --paper-time-input-cotnainer;
+        };
+        --paper-input-container-input-webkit-spinner: {
+          -webkit-appearance: none;
+          margin: 0;
+          display: none;
+        };
+      }
+
+      paper-icon-button{
+        padding: 0px;
+        height: 17px;
+        width: 17px;
+      }
+
+      .suffix{
+        /* Layout */
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+
+        /* Vertical */
+        -ms-flex-direction: column;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+
+        /* End */
+        -ms-flex-align: end;
+        -webkit-align-items: flex-end;
+        align-items: flex-end;
+
+        visibility: hidden;
+      }
+      paper-input:hover .suffix{
+        visibility: visible;
+      }
+    </style>
+
+    <iron-iconset-svg name="paper-number-icons" size="24">
+      <svg>
+        <defs>
+          <g id="keyboard-arrow-up"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></g>
+          <g id="keyboard-arrow-down"><path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/></g>
+        </defs>
+      </svg>
+    </iron-iconset-svg>
+
+    <paper-input value="{{value}}" no-label-float type="number" maxlength="2" min="0" auto-validate>
+      <div class="suffix" slot="suffix">
+        <paper-icon-button on-tap="add" icon="paper-number-icons:keyboard-arrow-up"></paper-icon-button>
+        <paper-icon-button on-tap="subtract" icon="paper-number-icons:keyboard-arrow-down"></paper-icon-button>
+      </div>
+    </paper-input>
+
+  </template>
+
+  <script>
+    /**
+     * `paper-number-input`
+     * paper number input
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class PaperNumberInput extends Polymer.Element {
+      static get is() { return 'paper-number-input'; }
+      static get properties() {
+        return {
+          value: {
+            type: Number,
+            notify: true
+          }
+        };
+      }
+
+      add(){
+        if (!this.value) {
+          this.value = 1;
+          return;
+        }
+        this.value = this.value + 1;
+      }
+      subtract(){
+        if (!this.value) {
+          this.value = 0;
+          return;
+        }
+        this.value = this.value - 1;
+      }
+    }
+
+    window.customElements.define(PaperNumberInput.is, PaperNumberInput);
+  </script>
+</dom-module>
