@@ -6,52 +6,61 @@
 <dom-module id="paper-number-input">
   <template>
     <style>
-      paper-input{
-        max-width: 70px;
-        --paper-input-container-label: {
-          display: none;
-        }
-        --paper-input-container: {
-          padding: 0;
-        }
-        --paper-input-container-input: {
-          -moz-appearance: textfield;
-          @apply --paper-time-input-cotnainer;
-        };
-        --paper-input-container-input-webkit-spinner: {
-          -webkit-appearance: none;
-          margin: 0;
-          display: none;
-        };
+    :host{
+      position: relative;
+    }
+    paper-input{
+      max-width: 70px;
+      --paper-input-container-label: {
+        display: none;
       }
-
-      paper-icon-button{
-        padding: 0px;
-        height: 17px;
-        width: 17px;
+      --paper-input-container: {
+        position: relative;
+        padding: 0;
       }
+      --paper-input-container-input: {
+        -moz-appearance: textfield;
+        line-height: var(--paper-number-input-line-height);
+        text-align: center;
+      };
+      --paper-input-container-input-webkit-spinner: {
+        -webkit-appearance: none;
+        margin: 0;
+        display: none;
+      };
+    }
 
-      .suffix{
-        /* Layout */
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
+    paper-icon-button{
+      padding: 0px;
+      height: 17px;
+      width: 17px;
+    }
 
-        /* Vertical */
-        -ms-flex-direction: column;
-        -webkit-flex-direction: column;
-        flex-direction: column;
+    .suffix{
+      position: absolute;
+      bottom: 0;
+      right: 0;
 
-        /* End */
-        -ms-flex-align: end;
-        -webkit-align-items: flex-end;
-        align-items: flex-end;
+      /* Layout */
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
 
-        visibility: hidden;
-      }
-      paper-input:hover .suffix{
-        visibility: visible;
-      }
+      /* Vertical */
+      -ms-flex-direction: column;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+
+      /* End */
+      -ms-flex-align: end;
+      -webkit-align-items: flex-end;
+      align-items: flex-end;
+
+      visibility: hidden;
+    }
+    paper-input:hover .suffix{
+      visibility: visible;
+    }
     </style>
 
     <iron-iconset-svg name="paper-number-icons" size="24">
@@ -63,7 +72,7 @@
       </svg>
     </iron-iconset-svg>
 
-    <paper-input value="{{value}}" no-label-float type="number" maxlength="2" min="0" auto-validate>
+    <paper-input id="input" value="{{value}}" no-label-float type="number" maxlength="2" min="0" auto-validate>
       <div class="suffix" slot="suffix">
         <paper-icon-button on-tap="add" icon="paper-number-icons:keyboard-arrow-up"></paper-icon-button>
         <paper-icon-button on-tap="subtract" icon="paper-number-icons:keyboard-arrow-down"></paper-icon-button>
@@ -95,16 +104,25 @@
       add(){
         if (!this.value) {
           this.value = 1;
-          return;
+        }else {
+          this.value = Number(this.value) + 1;
         }
-        this.value = this.value + 1;
+        this._onInput();
       }
       subtract(){
         if (!this.value) {
           this.value = 0;
-          return;
+        }else {
+          this.value = Number(this.value) - 1;
         }
-        this.value = this.value - 1;
+        this._onInput();
+      }
+      _onInput(){
+        var event = new Event('input', {
+          'bubbles': true,
+          'cancelable': true
+        });
+        this.dispatchEvent(event);
       }
     }
 
